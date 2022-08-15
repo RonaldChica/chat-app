@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import ChatPage from './components/ChatPage';
+import socketIO from 'socket.io-client';
 
+const socket = socketIO.connect('http://localhost:4001');
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home socket={socket} />}></Route>
+          <Route path="/chat" element={<ChatPage socket={socket} />}></Route>
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
