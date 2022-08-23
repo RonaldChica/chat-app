@@ -9,8 +9,13 @@ const ChatPage = ({ socket }) => {
   const lastMessageRef = useRef(null);
 
   useEffect(() => {
-    socket.on('messageResponse', (data) => setMessages([...messages, data]));
-  }, [socket, messages]);
+    function fetchMessages() {
+      fetch("http://localhost:4000/api")
+        .then(response => response.json())
+        .then(data => setMessages(data.messages))
+    }
+    fetchMessages()
+  }, [])
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change

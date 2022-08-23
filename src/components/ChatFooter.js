@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import checkPageStatus from "../utils/functions";
 
 const ChatFooter = ({ socket }) => {
-  const [message, setMessage] = useState('');
-
+  const [message, setMessage] = useState("");
   const handleTyping = () =>
-    socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
+    socket.emit("typing", `${localStorage.getItem("userName")} is typing`);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (message.trim() && localStorage.getItem('userName')) {
-      socket.emit('message', {
+    if (message.trim() && localStorage.getItem("userName")) {
+      socket.emit("message", {
         text: message,
-        name: localStorage.getItem('userName'),
+        name: localStorage.getItem("userName"),
         id: `${socket.id}${Math.random()}`,
-        socketID: socket.id,
       });
+      //Here it is 👇🏻
+      checkPageStatus(message, localStorage.getItem("userName"));
     }
-    setMessage('');
   };
+  setMessage("");
+
+  //Check PageStatus Function
+  const checkPageStatus = () => {};
+
   return (
     <div className="chat__footer">
       <form className="form" onSubmit={handleSendMessage}>
